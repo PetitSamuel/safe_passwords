@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:safe/components/shared/TextStyles.dart' as TextStyles;
 import 'package:safe/components/shared/URLHelper.dart';
 import 'package:safe/models/CredentialActions.dart';
 import 'package:safe/models/PasswordModel.dart';
 import 'package:flutter/services.dart';
+import 'package:local_auth/local_auth.dart';
+import 'package:safe/providers/CredentialsProvider.dart';
 
 import 'dialogs/ConfirmDeleteCredentialDialog.dart';
 import 'dialogs/ModifyPasswordDialog.dart';
@@ -22,6 +25,12 @@ class SingleCredentialTile extends StatefulWidget {
 
 class _SingleCredentialTileState extends State<SingleCredentialTile> {
   bool showPassword = false;
+  bool useBiometrics = true;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    useBiometrics = context.read<CredentialsProvider>().canCheckBiometrics;
+  }
 
   copyToClipboard(String value) {
     Clipboard.setData(new ClipboardData(text: value));
@@ -68,9 +77,11 @@ class _SingleCredentialTileState extends State<SingleCredentialTile> {
                       IconButton(
                         icon: Icon(Icons.copy_rounded),
                         tooltip: 'Copy to clipboard',
-                        onPressed: () => {
-                          // TODO : add auth check
-                          copyToClipboard(widget.pw.password)
+                        onPressed: () async => {
+                          if (await context
+                              .read<CredentialsProvider>()
+                              .verifyUser("Authentificate to proceed"))
+                            {copyToClipboard(widget.pw.password)}
                         },
                       ),
                       IconButton(
@@ -79,7 +90,16 @@ class _SingleCredentialTileState extends State<SingleCredentialTile> {
                             : Icons.visibility),
                         tooltip:
                             showPassword ? 'Hide password' : 'Show password',
-                        onPressed: () {
+                        onPressed: () async {
+                          print(useBiometrics);
+                          if (!showPassword &&
+                              await context
+                                      .read<CredentialsProvider>()
+                                      .verifyUser(
+                                          "Authentificate to proceed") ==
+                                  false) {
+                            return;
+                          }
                           setState(() {
                             showPassword = !showPassword;
                           });
@@ -134,7 +154,11 @@ class _SingleCredentialTileState extends State<SingleCredentialTile> {
                 onSelected: (route) async {
                   switch (route) {
                     case CredentialActions.MODIFY:
-                      showModifyPasswordDialog(widget.pw);
+                      if (await context
+                          .read<CredentialsProvider>()
+                          .verifyUser("Authentificate to proceed")) {
+                        showModifyPasswordDialog(widget.pw);
+                      }
                       break;
                     case CredentialActions.REMOVE:
                       showConfirmDeleteDialog(widget.pw.website);

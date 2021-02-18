@@ -5,17 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:safe/components/shared/TextStyles.dart' as TextStyles;
 import 'package:safe/providers/CredentialsProvider.dart';
 import 'package:provider/provider.dart';
+import 'package:safe/components/shared/TextStyles.dart' as TextStyles;
 
-class DeleteCredentialDialog extends StatefulWidget {
-  final String website;
+class ExportPasswordsDialog extends StatefulWidget {
+  final String code;
 
-  const DeleteCredentialDialog({Key key, this.website}) : super(key: key);
+  const ExportPasswordsDialog({Key key, this.code}) : super(key: key);
 
   @override
-  _DeleteCredentialDialogState createState() => _DeleteCredentialDialogState();
+  _ExportPasswordsDialogState createState() => _ExportPasswordsDialogState();
 }
 
-class _DeleteCredentialDialogState extends State<DeleteCredentialDialog> {
+class _ExportPasswordsDialogState extends State<ExportPasswordsDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -43,35 +44,28 @@ class _DeleteCredentialDialogState extends State<DeleteCredentialDialog> {
                 children: <Widget>[
                   Align(
                     alignment: Alignment.center,
-                    child: Text("Delete Password?",
+                    child: Text("Passwords Exported",
                         style: TextStyles.TITLE_TEXT_STYLE),
                   ),
                   SizedBox(
                     height: 15,
                   ),
                   Text(
-                      "This action will permanently remove the password from the application."),
+                      "Your passwords were successfully exported to your device's Download folder. The file is encrypted using UTF-8 encoding and AES encryption."),
                   SizedBox(
                     height: 15,
                   ),
+                  Text(
+                      "Save the following encryption key safely, it will not be stored anywhere: "),
+                  SizedBox(height: 12),
+                  SelectableText(widget.code,
+                      style: TextStyles.CREDENTIAL_DETAILS_TEXT),
                   ButtonBar(
                     children: [
-                      FlatButton(
-                          child: Text('Cancel'),
+                      RaisedButton(
+                          child: Text('OK'),
                           onPressed: () {
                             Navigator.pop(context);
-                          }),
-                      RaisedButton(
-                          child: Text('Confirm'),
-                          onPressed: () async {
-                            if (await context
-                                .read<CredentialsProvider>()
-                                .verifyUser("Authentificate to proceed")) {
-                              await context
-                                  .read<CredentialsProvider>()
-                                  .removePassword(widget.website);
-                              Navigator.pop(context);
-                            }
                           }),
                     ],
                   )
