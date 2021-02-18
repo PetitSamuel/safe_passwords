@@ -20,7 +20,8 @@ class _SearchWidgetState extends State<SearchWidget> {
   Widget build(BuildContext context) {
     return Padding(
         padding: EdgeInsets.only(left: 16, right: 16, top: 4, bottom: 8),
-        child: TextField(
+        child:  TextField(
+          autofocus: false,
           controller: searchController,
           onChanged: (_) {
             updateSearch(context);
@@ -37,6 +38,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                 onPressed: () {
                   searchController.clear();
                   updateSearch(context);
+                  FocusScope.of(context).unfocus();
                 },
                 icon: Icon(Icons.clear),
               ),

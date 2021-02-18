@@ -46,7 +46,7 @@ class _ModifyPasswordDialogState extends State<ModifyPasswordDialog> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Align(
-                alignment: Alignment.topLeft,
+                alignment: Alignment.center,
                 child: Text(widget.title, style: TextStyles.TITLE_TEXT_STYLE),
               ),
               SizedBox(

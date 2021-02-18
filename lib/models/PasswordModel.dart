@@ -23,4 +23,8 @@ class PasswordModel {
       'created': created?.toIso8601String(),
     };
   }
+
+  DateTime getLastModifiedOrCreated() {
+    return lastModified ?? created;
+  }
 }

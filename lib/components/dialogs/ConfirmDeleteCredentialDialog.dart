@@ -42,7 +42,7 @@ class _DeleteCredentialDialogState extends State<DeleteCredentialDialog> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Align(
-                    alignment: Alignment.topLeft,
+                    alignment: Alignment.center,
                     child: Text("Delete Password?",
                         style: TextStyles.TITLE_TEXT_STYLE),
                   ),

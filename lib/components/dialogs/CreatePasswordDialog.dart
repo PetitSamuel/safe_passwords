@@ -43,7 +43,7 @@ class _CreatePasswordDialogState extends State<CreatePasswordDialog> {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Align(
-                alignment: Alignment.topLeft,
+                alignment: Alignment.center,
                 child: Text(widget.title, style: TextStyles.TITLE_TEXT_STYLE),
               ),
               SizedBox(

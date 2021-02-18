@@ -13,7 +13,7 @@ class PasswordsListBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var passwords = context.watch<CredentialsProvider>().filteredPassword;
+    var passwords = context.watch<CredentialsProvider>().filteredSortedCredentials;
 
     return ListView.builder(
       itemCount: passwords.length + 1,
